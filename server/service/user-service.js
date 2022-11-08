@@ -21,10 +21,10 @@ class UserService {
 		await mailService.sendActivationMail(email, `${process.env.API_URL}/api/activate/${activationLink}`)
 		
 		const userDto = new UserDto(user) // id, email, isActivated, fio, phone
-		const token = tokenService.generateTokens({...userDto})
-		await tokenService.saveToken(userDto.id, token.accessToken)
+		const tokens = tokenService.generateTokens({...userDto})
+		await tokenService.saveToken(userDto.id, tokens.refreshToken)
 		
-		return {...token, user: userDto}
+		return {...tokens, user: userDto}
 	}
 	
 	async activate(activationLink) {
@@ -44,14 +44,39 @@ class UserService {
 		}
 		
 		const isPassEquals = await bcrypt.compare(password, user.password)
-		if(!isPassEquals) {
+		if (!isPassEquals) {
 			throw ApiError.BadRequest("Неверный пароль")
 		}
 		const userDto = new UserDto(user)
 		const token = tokenService.generateTokens({...userDto})
 		
-		await tokenService.saveToken(userDto.id, token.accessToken)
+		await tokenService.saveToken(userDto.id, token.refreshToken)
 		return {...token, user: userDto}
+	}
+	
+	async refresh(refreshToken) {
+		if (!refreshToken) {
+			throw ApiError.UnauthorizedError()
+		}
+		const userData = tokenService.validateRefreshToken(refreshToken)
+		const tokenFromDB = await tokenService.findToken(refreshToken)
+		
+		if (!userData || !tokenFromDB) {
+			throw ApiError.UnauthorizedError()
+		}
+		const user = await UserModel.findById(userData.id)
+		
+		const userDto = new UserDto(user)
+		const token = tokenService.generateTokens({...userDto})
+		
+		await tokenService.saveToken(user.id, token.refreshToken)
+		return {...token, user: userDto}
+	}
+	
+	async getAllUsersData() {
+		const users = await UserModel.find()
+		
+		return users
 	}
 }
 
