@@ -1,0 +1,32 @@
+.Registration {
+  margin: 60px auto;
+  width: 500px;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  height: 60vh;
+  border: 2px solid #e1e5ee;
+  border-radius: 5px;
+
+  :nth-child(n) {
+    margin-top: 55px;
+  }
+
+  .btn {
+    button {
+      width: 180px;
+      height: 30px;
+      cursor: pointer;
+      background: transparent;
+      border: 2px solid #e1e5ee;
+      border-radius: 10px;
+      outline: none;
+      transition: .7s ease-in-out;
+
+      &:hover {
+        transition: .7s ease-in-out;
+        background: #e1e5ee;
+      }
+    }
+  }
+}

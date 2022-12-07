@@ -1,0 +1,24 @@
+.Header {
+  background: #e1e5ee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 5px 20px;
+  a {
+    margin-right: 20px;
+    text-decoration: none;
+    color: black;
+
+    transition: color 0.3s ease;
+    &:hover {
+      color: rgb(84, 117, 110);
+    }
+  }
+  .Navbar {
+    ul {
+      li {
+        list-style-type: none;
+      }
+    }
+  }
+}
