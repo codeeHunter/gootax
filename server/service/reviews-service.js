@@ -1,32 +1,37 @@
+const mongoose = require("mongoose");
 const ReviewsModel = require("../models/reviews-model");
 
 class ReviewsService {
-  async createReviews(title, text, rating, img, author) {
-    try {
-      const reviews = await ReviewsModel.create({
-        title,
-        text,
-        rating,
-        img,
-        author,
-      });
+  async createReviews(title, text, rating, img, author, city) {
+    const reviews = await ReviewsModel.create({
+      title,
+      text,
+      rating,
+      img,
+      author,
+      city,
+    });
 
-      return reviews;
-    } catch (e) {
-      console.log(e);
-    }
+    return reviews;
   }
 
-  async getAllReviews() {
-    try {
-      const allReviews = await ReviewsModel.find();
+  async editReview(_id, title, text, img, rating) {
+    const review = await ReviewsModel.findByIdAndUpdate(_id, {
+      title,
+      text,
+      rating,
+      img,
+    });
 
-      console.log(allReviews);
+    return review;
+  }
 
-      return allReviews;
-    } catch (e) {
-      console.log(e);
-    }
+  async getAllUserReviews(id) {
+    const userReviews = ReviewsModel.find({
+      author: mongoose.Types.ObjectId(id),
+    });
+
+    return userReviews;
   }
 }
 
