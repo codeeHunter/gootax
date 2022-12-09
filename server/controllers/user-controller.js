@@ -11,12 +11,12 @@ class UserController {
           ApiError.BadRequest("Ошибка при валидации", errors.array())
         );
       }
-      const { email, password, fio, phone } = req.body;
+      const { fio, email, phone, password } = req.body;
       const userData = await userService.registration(
-        email,
-        password,
         fio,
-        phone
+        email,
+        phone,
+        password
       );
       res.cookie("refreshToken", userData.refreshToken, {
         httpOnly: true,

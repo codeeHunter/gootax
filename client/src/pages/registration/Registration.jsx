@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Input } from "../../components/input/Input";
 import Styles from "./Registration.module.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { setUser } from "../../store/slice/userSlice";
 import { useNavigate } from "react-router-dom";
+import { fetchUserRegistration } from "../../store/slice/user";
+import GridLoader from "react-spinners/GridLoader";
 
 export const Registration = () => {
   const [fullName, setFullName] = useState();
@@ -11,9 +12,10 @@ export const Registration = () => {
   const [phoneNumber, setPhoneNumber] = useState();
   const [password, setPassword] = useState();
   const [accessPassword, setAccessPassword] = useState();
-  const [error, setError] = useState(false);
+  const [errorValidate, setError] = useState(false);
   const dispatch = useDispatch();
-  const { userAuth } = useSelector((state) => state.user);
+  const { status, error, statusAuth } = useSelector((state) => state.user);
+  const [redirect, setRedirect] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,38 +25,57 @@ export const Registration = () => {
     }
   }, [password, accessPassword]);
 
+  useEffect(() => {
+    if (statusAuth) {
+      return navigate("/login");
+    }
+  }, [statusAuth]);
+
   const setRegistration = () => {
-    dispatch(setUser({ fullName, email, phoneNumber }));
+    dispatch(fetchUserRegistration({ fullName, email, phoneNumber, password }));
   };
 
-  if (userAuth) {
-    return navigate("/login");
-  }
-
   return (
-    <div className={Styles.Registration}>
-      <Input label={"ФИО"} setState={setFullName} state={fullName} />
-      <Input label={"Email"} type={"email"} setState={setEmail} state={email} />
-      <Input label={"Телефон"} setState={setPhoneNumber} state={phoneNumber} />
-      <Input
-        label={"Придумайте пароль"}
-        type={"password"}
-        setState={setPassword}
-        state={password}
-        error={error}
-      />
-      <Input
-        label={"Потвердите пароль"}
-        type={"password"}
-        setState={setAccessPassword}
-        state={accessPassword}
-        error={error}
-      />
-      <div className={Styles.btn}>
-        <button disabled={error} onClick={setRegistration}>
-          Зарегистрироваться
-        </button>
-      </div>
-    </div>
+    <>
+      {!status ? (
+        <div className={Styles.Registration}>
+          <Input label={"ФИО"} setState={setFullName} state={fullName} />
+          <Input
+            label={"Email"}
+            type={"email"}
+            setState={setEmail}
+            state={email}
+          />
+          <Input
+            label={"Телефон"}
+            setState={setPhoneNumber}
+            state={phoneNumber}
+          />
+          <Input
+            label={"Придумайте пароль"}
+            type={"password"}
+            setState={setPassword}
+            state={password}
+            error={errorValidate}
+          />
+          <Input
+            label={"Потвердите пароль"}
+            type={"password"}
+            setState={setAccessPassword}
+            state={accessPassword}
+            error={errorValidate}
+          />
+          <div className={Styles.btn}>
+            <button disabled={errorValidate} onClick={setRegistration}>
+              Зарегистрироваться
+            </button>
+          </div>
+        </div>
+      ) : (
+        <>
+          <GridLoader color="#b8b8b8" loading={status} size={70} />
+        </>
+      )}
+    </>
   );
 };

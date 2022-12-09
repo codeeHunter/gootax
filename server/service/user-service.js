@@ -7,7 +7,7 @@ const UserDto = require("../dtos/user-dto");
 const ApiError = require("../exceptions/api-error");
 
 class UserService {
-  async registration(email, password, fio, phone) {
+  async registration(fio, email, phone, password) {
     const candidate = await UserModel.findOne({ email });
 
     if (candidate) {
@@ -54,9 +54,9 @@ class UserService {
       throw ApiError.BadRequest("Пользователь c таким email не найден");
     }
 
-    if (!user.isActivated) {
-      throw ApiError.BadRequest("Вы не подтвердили свою почту");
-    }
+    // if (!user.isActivated) {
+    //   throw ApiError.BadRequest("Вы не подтвердили свою почту");
+    // }
 
     const isPassEquals = await bcrypt.compare(password, user.password);
     if (!isPassEquals) {

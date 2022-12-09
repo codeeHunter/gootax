@@ -7,7 +7,7 @@ export const Header = () => {
     <div className={Styles.Header}>
       <div className={Styles.logo}>
         <h2>
-          <Link to="/registration">Города</Link>
+          <Link to="/">Города</Link>
         </h2>
       </div>
       <div className={Styles.Navbar}>

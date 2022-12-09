@@ -1,16 +1,13 @@
 .Registration {
   margin: 60px auto;
+  padding-top: 80px;
   width: 500px;
   display: flex;
   align-items: center;
   flex-direction: column;
-  height: 60vh;
+  height: 53vh;
   border: 2px solid #e1e5ee;
   border-radius: 5px;
-
-  :nth-child(n) {
-    margin-top: 55px;
-  }
 
   .btn {
     button {
@@ -21,11 +18,12 @@
       border: 2px solid #e1e5ee;
       border-radius: 10px;
       outline: none;
-      transition: .7s ease-in-out;
+      transition: 0.7s ease-in-out;
 
       &:hover {
-        transition: .7s ease-in-out;
+        transition: 0.7s ease-in-out;
         background: #e1e5ee;
+        border: 2px solid #2a324b;
       }
     }
   }

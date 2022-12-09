@@ -17,6 +17,7 @@ $radius: 50px;
 .form {
   position: relative;
   width: 200px;
+  margin-bottom: 70px;
 
   &__input {
     position: absolute;
@@ -32,6 +33,7 @@ $radius: 50px;
     outline: none;
     padding: 1.25rem;
     background: none;
+    z-index: 10;
 
     &:hover {
       border-color: $clr-gray600;
@@ -41,14 +43,14 @@ $radius: 50px;
       border-color: $clr-primary-dark;
     }
   }
-  
+
   &__error {
     border: 2px solid $clr-red;
   }
 
   &__label {
     position: absolute;
-    left: 1rem;
+    left: 0rem;
     top: 0.5rem;
     padding: 0 0.5rem;
     border-radius: 6px;
@@ -56,12 +58,13 @@ $radius: 50px;
     cursor: text;
     transition: top 200ms ease-in, left 200ms ease-in, font-size 200ms ease-in;
     background-color: $clr-gray500;
+    z-index: 1;
   }
 }
 
 .form__input:focus ~ .form__label,
 .form__input:not(:placeholder-shown).form__input:not(:focus) ~ .form__label {
-  top: -0.3rem;
-  font-size: 0.8rem;
+  top: -1.3rem;
+  font-size: 1rem;
   left: 0.8rem;
 }
