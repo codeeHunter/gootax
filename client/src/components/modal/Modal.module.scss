@@ -1,53 +1,32 @@
-.modal {
+.Modal {
+  height: 100vh;
+  width: 100vw;
+  background: rgba($color: #000000, $alpha: 0.4);
   position: fixed;
-  left: 0;
   top: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  left: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: 0.5s;
   opacity: 0;
-  transition: all 0.3s ease-in-out;
   pointer-events: none;
-
-  &_content {
-    width: 500px;
-    background-color: #fff;
-    transition: all 0.3s ease-in-out;
-    transform: translateY(-200px);
-  }
-
-  .enter-done &_content {
-    transform: translateY(0);
-  }
-
-  .exit &_content {
-    transform: translateY(-200px);
-  }
-
-  &_header,
-  &_footer {
-    padding: 10px;
-  }
-
-  &_title {
-    margin: 0;
-  }
-
-  &_body {
-    padding: 10px;
-    border-top: 1px solid #eee;
-    border-bottom: 1px solid #eee;
-  }
-
-  .enter-done {
+  z-index: 1;
+  &__active {
     opacity: 1;
-    pointer-events: visible;
+    pointer-events: all;
   }
 
-  .exit {
-    opacity: 0;
+  &__content {
+    padding: 20px;
+    border-radius: 12px;
+    background: white;
+    width: 30vw;
+    transform: scale(0.5);
+    transition: transform 0.4s;
+
+    &__active {
+      transform: scale(1);
+    }
   }
 }

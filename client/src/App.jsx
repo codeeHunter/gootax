@@ -2,23 +2,24 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Header } from "./components/header/Header";
 import GridLoader from "react-spinners/GridLoader";
-import { Routes, Route, useNavigate } from "react-router-dom";
-import { City } from "./pages/city/City";
+import { Routes, Route } from "react-router-dom";
+import { Home } from "./pages/home/Home";
 import { Registration } from "./pages/registration/Registration";
 import { Login } from "./pages/login/Login";
 import { checkAuth } from "./store/slice/user";
 import { useSelector } from "react-redux";
-import { useGetCity } from "./hooks/useGetCity";
+import { useDispatch } from "react-redux";
 
 const App = () => {
+  const { userInfo } = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
-  const { statusAuth } = useSelector((state) => state.user);
-  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setLoading(true);
     if (localStorage.getItem("token")) {
-      checkAuth();
+      dispatch(checkAuth());
     }
     setLoading(false);
   }, []);
@@ -32,11 +33,11 @@ const App = () => {
       ) : (
         <>
           <>
-            <Header />
+            <Header userInfo={userInfo} />
           </>
           <>
             <Routes>
-              <Route path="/" element={<City />} />
+              <Route path="/" element={<Home />} />
               <Route path="/registration" element={<Registration />} />
               <Route path="/login" element={<Login />} />
             </Routes>

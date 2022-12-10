@@ -1,0 +1,23 @@
+.FormReview {
+  margin-top: 50px;
+  border: 2px solid #e1e5ee;
+  width: 50%;
+  margin: 30px auto;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+
+  button {
+    width: 50%;
+    margin-left: 20px;
+  }
+
+  .Form {
+    margin-top: 20px;
+  }
+  text-area {
+  }
+}

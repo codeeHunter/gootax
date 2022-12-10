@@ -6,6 +6,15 @@ export default class AuthService {
   }
 
   static async registration(fio, email, phoneNumber, password) {
-    return $api.post("/registration", { fio, email, phoneNumber, password });
+    return $api.post("/registration", {
+      fio,
+      email,
+      phone: phoneNumber,
+      password,
+    });
+  }
+
+  static async checkAuth() {
+    return $api.get("/refresh");
   }
 }

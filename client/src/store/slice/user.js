@@ -1,20 +1,19 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, isRejectedWithValue } from "@reduxjs/toolkit";
 import AuthService from "../../services/AuthService";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { API_URL } from "../../http";
+import $api, { API_URL } from "../../http";
 
 export const fetchUserRegistration = createAsyncThunk(
   "user/fetchUserRegistration",
   async (payload) => {
-    const { fullName, password, phoneNumber, email } = payload;
+    const { fullName, password, phone, email } = payload;
     const response = await AuthService.registration(
       fullName,
       email,
-      phoneNumber,
+      phone,
       password
     );
-
     return response.data;
   }
 );
@@ -22,17 +21,21 @@ export const fetchUserRegistration = createAsyncThunk(
 export const fetchUserAuthorization = createAsyncThunk(
   "user/fetchUserAuthorization",
   async (payload) => {
-    const { email, password } = payload;
-    const response = await AuthService.login(email, password);
+    try {
+      const { email, password } = payload;
+      const response = await AuthService.login(email, password);
 
-    return response.data;
+      return response.data;
+    } catch (e) {
+      if (!e.response.data) console.log(e);
+
+      return isRejectedWithValue(e.response.data.payload);
+    }
   }
 );
 
 export const checkAuth = createAsyncThunk("user/checkAuth", async () => {
-  const response = await axios.get(`${API_URL}/refresh`, {
-    withCredentials: true,
-  });
+  const response = await $api.get(`${API_URL}/refresh`);
 
   return response.data;
 });
@@ -41,24 +44,20 @@ const initialState = {
   userInfo: {},
   status: false,
   statusAuth: false,
+  choiceCity: false,
   errors: [],
 };
 
 export const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {
-    getUser: (state, action) => {
-      state.email = action.email;
-    },
-  },
+
   extraReducers: (builder) => {
     builder.addCase(fetchUserRegistration.pending, (state) => {
       state.status = true;
     });
 
     builder.addCase(fetchUserRegistration.fulfilled, (state, action) => {
-      localStorage.setItem("token", action.payload.accessToken);
       state.userInfo = action.payload.user;
       state.statusAuth = true;
       state.status = false;
@@ -76,8 +75,9 @@ export const userSlice = createSlice({
     });
 
     builder.addCase(fetchUserAuthorization.fulfilled, (state, action) => {
-      localStorage.setItem("token", action.payload.accessToken);
-      state.userInfo = action.payload.user;
+      console.log(action);
+      // localStorage.setItem("token", action.payload.data.accessToken);
+      // state.userInfo = action.payload.data.user;
       state.statusAuth = true;
       state.status = false;
     });
@@ -85,17 +85,28 @@ export const userSlice = createSlice({
     builder.addCase(fetchUserAuthorization.rejected, (state, action) => {
       state.statusAuth = false;
       state.status = false;
+      console.log(action);
       state.errors.push(action.error);
     });
 
     builder.addCase(checkAuth.fulfilled, (state, action) => {
       localStorage.setItem("token", action.payload.accessToken);
+      state.choiceCity = true;
       state.userInfo = action.payload.user;
       state.statusAuth = true;
+    });
+
+    builder.addCase(checkAuth.rejected, (state, action) => {
+      if (state.userInfo) {
+        state.statusAuth = true;
+      } else {
+        state.choiceCity = false;
+        state.statusAuth = false;
+      }
     });
   },
 });
 
-export const { getUser } = userSlice.actions;
+export const {} = userSlice.actions;
 
 export default userSlice.reducer;

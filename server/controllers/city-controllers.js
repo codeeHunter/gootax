@@ -12,7 +12,15 @@ class CityService {
     }
   }
 
+  async getAllCities(req, res, next) {
+    try {
+      const cities = await cityService.getAllCities();
 
+      return res.json(cities);
+    } catch (e) {
+      connsole.log(e)
+    }
+  }
 }
 
 module.exports = new CityService();

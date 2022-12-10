@@ -9,13 +9,12 @@ import GridLoader from "react-spinners/GridLoader";
 export const Registration = () => {
   const [fullName, setFullName] = useState();
   const [email, setEmail] = useState();
-  const [phoneNumber, setPhoneNumber] = useState();
+  const [phone, setPhone] = useState();
   const [password, setPassword] = useState();
   const [accessPassword, setAccessPassword] = useState();
   const [errorValidate, setError] = useState(false);
   const dispatch = useDispatch();
-  const { status, error, statusAuth } = useSelector((state) => state.user);
-  const [redirect, setRedirect] = useState(false);
+  const { status, statusAuth } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,14 +24,8 @@ export const Registration = () => {
     }
   }, [password, accessPassword]);
 
-  useEffect(() => {
-    if (statusAuth) {
-      return navigate("/login");
-    }
-  }, [statusAuth]);
-
   const setRegistration = () => {
-    dispatch(fetchUserRegistration({ fullName, email, phoneNumber, password }));
+    dispatch(fetchUserRegistration({ fullName, email, phone, password }));
   };
 
   return (
@@ -48,8 +41,8 @@ export const Registration = () => {
           />
           <Input
             label={"Телефон"}
-            setState={setPhoneNumber}
-            state={phoneNumber}
+            setState={setPhone}
+            state={phone}
           />
           <Input
             label={"Придумайте пароль"}

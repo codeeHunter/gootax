@@ -12,6 +12,8 @@ class UserController {
         );
       }
       const { fio, email, phone, password } = req.body;
+      console.log(phone);
+
       const userData = await userService.registration(
         fio,
         email,

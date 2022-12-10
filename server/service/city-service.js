@@ -13,6 +13,12 @@ class CityService {
 
     return city;
   }
+
+  async getAllCities() {
+    const cities = await CityModel.find();
+
+    return cities;
+  }
 }
 
 module.exports = new CityService();

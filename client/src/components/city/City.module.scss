@@ -1,0 +1,21 @@
+.City {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 70vw;
+  margin-bottom: 20px;
+  height: 43px;
+  cursor: pointer;
+  background: transparent;
+  border: 2px solid #e1e5ee;
+  border-radius: 10px;
+  outline: none;
+  padding-top: 8px;
+  transition: 0.7s ease-in-out;
+
+  &:hover {
+    transition: 0.7s ease-in-out;
+    background: #e1e5ee;
+    border: 2px solid #2a324b;
+  }
+}

@@ -1,0 +1,44 @@
+button {
+  margin-right: 20px;
+  width: 80px;
+  height: 43px;
+  cursor: pointer;
+  background: transparent;
+  border: 2px solid #e1e5ee;
+  border-radius: 10px;
+  outline: none;
+  transition: 0.7s ease-in-out;
+
+  &:hover {
+    transition: 0.7s ease-in-out;
+    background: #e1e5ee;
+    border: 2px solid #2a324b;
+  }
+}
+
+.ModalInfo {
+  font-size: 20px;
+}
+
+.SubModal {
+  display: flex;
+  justify-content: end;
+}
+
+.Input {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+
+  :nth-child(1) {
+    margin-top: 8px;
+    margin-right: 20px;
+  }
+
+  .Form {
+    display: flex;
+    align-items: center;
+  }
+}

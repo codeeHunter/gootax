@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchUserAuthorization } from "../../store/slice/user";
 import { useNavigate } from "react-router-dom";
 import GridLoader from "react-spinners/GridLoader";
+import { Modal } from "../../components/modal/Modal";
 
 export const Login = () => {
   const [email, setEmail] = useState("");
@@ -12,17 +13,18 @@ export const Login = () => {
   const dispatch = useDispatch();
   const { userInfo, status } = useSelector((state) => state.user);
   const navigate = useNavigate();
-
+  const [active, setActive] = useState(true);
   const setAuth = () => {
     dispatch(fetchUserAuthorization({ email, password }));
   };
 
-  if (!userInfo.isActivated) {
-    return;
-  }
-
   return (
     <>
+      {!userInfo.isActivated && !userInfo && (
+        <Modal active={active} setActive={setActive}>
+          <h4>Вы не подтвердили свою почту.</h4>
+        </Modal>
+      )}
       {status ? (
         <GridLoader color="#b8b8b8" loading={status} size={70} />
       ) : (

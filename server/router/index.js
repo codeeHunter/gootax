@@ -25,8 +25,10 @@ router.post(
   reviewsController.createReviews
 );
 router.post("/editReview", authMiddleware, reviewsController.editReview);
+router.get("/getReviews/:id", reviewsController.getAllReviews);
+router.get("/getAllCities", cityController.getAllCities)
 router.get(
-  "/getAllUserReviews",
+  "/getAllUserReviews/:id",
   authMiddleware,
   reviewsController.getAllUserReviews
 );

@@ -1,6 +1,5 @@
 const reviewsService = require("../service/reviews-service");
 const CityModel = require("../models/city-model");
-const mongoose = require("mongoose");
 const ApiError = require("../exceptions/api-error");
 
 class ReviewsController {
@@ -49,12 +48,23 @@ class ReviewsController {
 
   async getAllUserReviews(req, res, next) {
     try {
-      const { id } = req.user;
+      const { id } = req.params;
       const userReviews = await reviewsService.getAllUserReviews(id);
 
       return res.json(userReviews);
     } catch (e) {
       next(e);
+    }
+  }
+
+  async getAllReviews(req, res, next) {
+    try {
+      const { id } = req.params;
+      const cityReviews = await reviewsService.getAllReviews(id);
+
+      return res.json(cityReviews);
+    } catch (e) {
+      console.log(e);
     }
   }
 }

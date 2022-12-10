@@ -2,7 +2,7 @@ import React from "react";
 import Styles from "./Header.module.scss";
 import { Link } from "react-router-dom";
 
-export const Header = () => {
+export const Header = ({ userInfo }) => {
   return (
     <div className={Styles.Header}>
       <div className={Styles.logo}>
@@ -13,8 +13,14 @@ export const Header = () => {
       <div className={Styles.Navbar}>
         <ul>
           <li>
-            <Link to="/registration">Регистрация</Link>
-            <Link to="/login">Авторизация</Link>
+            {!userInfo.isActivated ? (
+              <>
+                <Link to="/registration">Регистрация</Link>
+                <Link to="/login">Авторизация</Link>
+              </>
+            ) : (
+              userInfo.email
+            )}
           </li>
         </ul>
       </div>
