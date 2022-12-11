@@ -14,7 +14,7 @@ export const Registration = () => {
   const [accessPassword, setAccessPassword] = useState();
   const [errorValidate, setError] = useState(false);
   const dispatch = useDispatch();
-  const { status, statusAuth } = useSelector((state) => state.user);
+  const { loading } = useSelector((state) => state.user);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,13 +24,19 @@ export const Registration = () => {
     }
   }, [password, accessPassword]);
 
+  if(loading) {
+    return navigate("/login")
+  }
+
   const setRegistration = () => {
     dispatch(fetchUserRegistration({ fullName, email, phone, password }));
   };
 
   return (
     <>
-      {!status ? (
+      {loading ? (
+        <GridLoader color="#b8b8b8" loading={loading} size={70} />
+      ) : (
         <div className={Styles.Registration}>
           <Input label={"ФИО"} setState={setFullName} state={fullName} />
           <Input
@@ -39,11 +45,7 @@ export const Registration = () => {
             setState={setEmail}
             state={email}
           />
-          <Input
-            label={"Телефон"}
-            setState={setPhone}
-            state={phone}
-          />
+          <Input label={"Телефон"} setState={setPhone} state={phone} />
           <Input
             label={"Придумайте пароль"}
             type={"password"}
@@ -64,10 +66,6 @@ export const Registration = () => {
             </button>
           </div>
         </div>
-      ) : (
-        <>
-          <GridLoader color="#b8b8b8" loading={status} size={70} />
-        </>
       )}
     </>
   );

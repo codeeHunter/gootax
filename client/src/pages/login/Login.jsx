@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Input } from "../../components/input/Input";
 import Styles from "./Login.module.scss";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,6 +17,10 @@ export const Login = () => {
   const setAuth = () => {
     dispatch(fetchUserAuthorization({ email, password }));
   };
+
+  if (status) {
+    return navigate("/");
+  }
 
   return (
     <>

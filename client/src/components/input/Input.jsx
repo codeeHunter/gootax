@@ -1,7 +1,7 @@
-import React, { useEffect } from "react";
+import React, { memo } from "react";
 import Styles from "./Input.module.scss";
 
-export const Input = ({
+const input = ({
   label,
   type = "text",
   setState,
@@ -29,3 +29,5 @@ export const Input = ({
     </div>
   );
 };
+
+export const Input = memo(input)

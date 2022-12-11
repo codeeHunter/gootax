@@ -1,7 +1,6 @@
 import { createSlice, isRejectedWithValue } from "@reduxjs/toolkit";
 import AuthService from "../../services/AuthService";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import $api, { API_URL } from "../../http";
 
 export const fetchUserRegistration = createAsyncThunk(
@@ -14,6 +13,7 @@ export const fetchUserRegistration = createAsyncThunk(
       phone,
       password
     );
+
     return response.data;
   }
 );
@@ -44,7 +44,7 @@ const initialState = {
   userInfo: {},
   status: false,
   statusAuth: false,
-  choiceCity: false,
+  loading: false,
   errors: [],
 };
 
@@ -55,18 +55,21 @@ export const userSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchUserRegistration.pending, (state) => {
       state.status = true;
+      state.loading = true;
     });
 
     builder.addCase(fetchUserRegistration.fulfilled, (state, action) => {
       state.userInfo = action.payload.user;
       state.statusAuth = true;
       state.status = false;
+      state.loading = false;
     });
 
     builder.addCase(fetchUserRegistration.rejected, (state, action) => {
       state.errors.push(action.error.stack);
       state.status = false;
       state.statusAuth = false;
+      state.loading = false;
     });
 
     builder.addCase(fetchUserAuthorization.pending, (state) => {
@@ -75,9 +78,8 @@ export const userSlice = createSlice({
     });
 
     builder.addCase(fetchUserAuthorization.fulfilled, (state, action) => {
-      console.log(action);
-      // localStorage.setItem("token", action.payload.data.accessToken);
-      // state.userInfo = action.payload.data.user;
+      localStorage.setItem("token", action.payload.accessToken);
+      state.userInfo = action.payload.user;
       state.statusAuth = true;
       state.status = false;
     });
@@ -85,7 +87,6 @@ export const userSlice = createSlice({
     builder.addCase(fetchUserAuthorization.rejected, (state, action) => {
       state.statusAuth = false;
       state.status = false;
-      console.log(action);
       state.errors.push(action.error);
     });
 
@@ -97,12 +98,7 @@ export const userSlice = createSlice({
     });
 
     builder.addCase(checkAuth.rejected, (state, action) => {
-      if (state.userInfo) {
-        state.statusAuth = true;
-      } else {
-        state.choiceCity = false;
-        state.statusAuth = false;
-      }
+      state.statusAuth = false;
     });
   },
 });

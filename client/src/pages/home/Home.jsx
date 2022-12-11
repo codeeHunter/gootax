@@ -1,57 +1,79 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { City } from "../../components/city/City";
-import { Input } from "../../components/input/Input";
 import { Modal } from "../../components/modal/Modal";
 import { Reviews } from "../../components/reviews/Reviews";
 import { useGetCity } from "../../hooks/useGetCity";
-import { createCity, fetchCities } from "../../store/slice/city";
+import { fetchCities } from "../../store/slice/city";
 import Styles from "./Home.module.scss";
+import { getReviews } from "./../../store/slice/city";
+import { GridLoader } from "react-spinners/GridLoader";
 
 export const Home = () => {
   const [show, setShow] = useState(true);
   const city = useGetCity();
-  const { statusAuth, choiceCity } = useSelector((state) => state.user);
-  const { status, cityInfo, reviewsInfo } = useSelector((state) => state.city);
+  const { statusAuth } = useSelector((state) => state.user);
+  const { cityInfo, reviewsInfo, check, status } = useSelector(
+    (state) => state.city
+  );
   const [truthCity, setTruthCity] = useState();
-  const [choice, setChoice] = useState();
+  const [choice, setChoice] = useState("");
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (!statusAuth && city) {
+      setShow(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (localStorage.getItem("checkChoice") == false) {
+      setTruthCity(false);
+    } else {
+      getCity();
+    }
+
     if (!truthCity) {
       dispatch(fetchCities());
     }
-  }, [truthCity]);
+  }, [truthCity, show]);
+
+  const getCity = () => {
+    let cityId = "";
+    cityInfo.map((item) => {
+      if (item.name.toLowerCase() === "ижевск") {
+        cityId = item._id;
+      }
+    });
+
+    dispatch(getReviews(cityId));
+    localStorage.setItem("checkChoice", true);
+    setTruthCity(true);
+    setShow(false);
+  };
 
   return (
-    <div>
-      {city && statusAuth && (
-        <Modal title="Город" active={show} setActive={setShow}>
-          <div className={Styles.ModalInfo}>
-            <p>Ваш город Izhevsk?</p>
-          </div>
-          <div className={Styles.SubModal}>
-            <button
-              onClick={() => {
-                setTruthCity(true);
-                setShow(false);
-              }}
-            >
-              Да
-            </button>
-            <button
-              onClick={() => {
-                setTruthCity(false);
-                setShow(false);
-              }}
-            >
-              Нет
-            </button>
-          </div>
-        </Modal>
-      )}
-      {!choice ? (
-        <>
+    <>
+      <div>
+        {check && (
+          <Modal title="Город" active={show} setActive={setShow}>
+            <div className={Styles.ModalInfo}>
+              <p>Ваш город Izhevsk?</p>
+            </div>
+            <div className={Styles.SubModal}>
+              <button onClick={getCity}>Да</button>
+              <button
+                onClick={() => {
+                  setTruthCity(false);
+                  setShow(false);
+                }}
+              >
+                Нет
+              </button>
+            </div>
+          </Modal>
+        )}
+        {choice.length == 0 ? (
           <div className={Styles.Input}>
             <div className={Styles.Cities}>
               {cityInfo &&
@@ -65,10 +87,10 @@ export const Home = () => {
                 ))}
             </div>
           </div>
-        </>
-      ) : (
-        <Reviews reviews={reviewsInfo} />
-      )}
-    </div>
+        ) : (
+          <Reviews reviews={reviewsInfo} nameCity={choice} />
+        )}
+      </div>
+    </>
   );
 };

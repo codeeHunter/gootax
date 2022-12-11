@@ -29,6 +29,7 @@ $api.interceptors.response.use(
         return $api.request(originalRequest);
       } catch (e) {
         console.log("Пользователь не авторизован");
+        localStorage.setItem("checkChoice", false);
       }
     }
   }

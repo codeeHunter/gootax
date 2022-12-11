@@ -8,7 +8,7 @@ export const City = ({ name, id, setChoice }) => {
 
   const setCity = () => {
     dispatch(getReviews(id));
-    setChoice(true);
+    setChoice(name);
   };
 
   return (
