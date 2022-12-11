@@ -29,7 +29,7 @@ router.post(
   reviewsController.createReviews
 );
 router.post(
-  "/editReview",
+  "/editReviews",
   authMiddleware,
   uploadMiddleware.single("image"),
   reviewsController.editReview

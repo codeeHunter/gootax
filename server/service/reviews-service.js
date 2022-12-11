@@ -16,13 +16,13 @@ class ReviewsService {
     return reviews;
   }
 
-  async editReview(_id, title, text, img, rating) {
+  async editReview(_id, title, text, rating) {
     const review = await ReviewsModel.findByIdAndUpdate(_id, {
       title,
       text,
       rating,
-      img,
     });
+
 
     return review;
   }
@@ -40,8 +40,6 @@ class ReviewsService {
       city: mongoose.Types.ObjectId(cityId),
     });
 
-    
-
     const authors = await userModel.find();
 
     reviews.forEach((item) => {
@@ -51,8 +49,6 @@ class ReviewsService {
         }
       });
     });
-    console.log(reviews)
-
 
     return reviews;
   }

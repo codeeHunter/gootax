@@ -8,8 +8,9 @@ class ReviewsController {
       const { title, text, rating, city } = req.body;
       const image = req.file.path;
       const user = req.user;
-      
+
       const cityName = await CityModel.find({ name: city });
+
       const author = user.id;
 
       const reviewsData = await reviewsService.createReviews(
@@ -30,18 +31,19 @@ class ReviewsController {
   async editReview(req, res, next) {
     try {
       const { id } = req.user;
-      const { _id, title, text, img, rating } = req.body;
+
+      const { _id, title, text, rating } = req.body;
+
       const reviewsUpdate = await reviewsService.editReview(
         _id,
         title,
         text,
-        img.file.path,
         rating
       );
 
-      if (id !== reviewsUpdate.author.toString()) {
-        throw ApiError.BadRequest("Вы не можете редактировать чужой отзыв");
-      }
+      // if (id !== reviewsUpdate.author.toString()) {
+      //   throw ApiError.BadRequest("Вы не можете редактировать чужой отзыв");
+      // }
 
       return res.json(reviewsUpdate);
     } catch (e) {
