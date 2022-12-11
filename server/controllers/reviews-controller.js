@@ -5,15 +5,18 @@ const ApiError = require("../exceptions/api-error");
 class ReviewsController {
   async createReviews(req, res, next) {
     try {
-      const { title, text, rating, img, city } = req.body;
+      const { title, text, rating, city } = req.body;
+      const image = req.file.path;
       const user = req.user;
+      
       const cityName = await CityModel.find({ name: city });
       const author = user.id;
+
       const reviewsData = await reviewsService.createReviews(
         title,
         text,
         rating,
-        img,
+        image,
         author,
         cityName[0]._id
       );
@@ -32,7 +35,7 @@ class ReviewsController {
         _id,
         title,
         text,
-        img,
+        img.file.path,
         rating
       );
 

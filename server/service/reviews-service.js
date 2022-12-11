@@ -3,12 +3,12 @@ const ReviewsModel = require("../models/reviews-model");
 const userModel = require("../models/user-model");
 
 class ReviewsService {
-  async createReviews(title, text, rating, img, author, city) {
+  async createReviews(title, text, rating, image, author, city) {
     const reviews = await ReviewsModel.create({
       title,
       text,
       rating,
-      img,
+      image,
       author,
       city,
     });
