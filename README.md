@@ -1,4 +1,8 @@
-# gootax
+# gootax. 
+
+## Stack
+- Frontend: React, Redux Toolkit, Axios, Scss.
+- Backend: Nodejs, Express, MongoDB. 
 
 
 ## Установка.
